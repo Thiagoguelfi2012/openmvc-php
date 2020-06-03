@@ -34,6 +34,9 @@ define('OPENMVC_HTTP_HOST', 'openmvc.local');
 /** Ativa o Debug de aplicação OpenMvcPHP */
 define('OPENMVC_DEBUG', TRUE);
 
+/** Raiz da include_path do PHP */
+define("OPENMVC_TMP_FOLDER", "/tmp");
+
 
 ini_set('memory_limit', '-1');
 /**

@@ -4,7 +4,7 @@ class Threads extends Loader {
 
     private $tasks = [];
     private $executor = 'openmvc_run_thread';
-    private $tmp_folder = '/tmp';
+    private $tmp_folder = OPENMVC_TMP_FOLDER;
     private $structure;
 
     public function __construct() {

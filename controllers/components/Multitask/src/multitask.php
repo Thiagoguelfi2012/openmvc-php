@@ -20,8 +20,7 @@ class Multitask {
         }
         return $this->tasks;
     }
-    
-        
+
     public function setTasks($tasks) {
         $this->tasks = $tasks;
     }
@@ -70,7 +69,7 @@ class Multitask {
         if (!$this->output) {
             $screen_cmd = "screen -dm -S  MultiTask-{$name} {$command} 2>&1 & echo $!;";
         } else {
-            $process['output_file'] = "/tmp/" . uniqid() . "_multitask.log";
+            $process['output_file'] = OPENMVC_TMP_FOLDER . "/" . uniqid() . "_multitask.log";
             $screen_cmd = "screen -L -Logfile {$process['output_file']} -dm -S  MultiTask-{$name} {$command} 2>&1 & echo $!;";
         }
         $pid = exec($screen_cmd);
