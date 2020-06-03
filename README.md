@@ -108,7 +108,7 @@ NGINX
             index index.php;
 
             location / {
-                    try_files $uri $uri/ /index.php?$uri;
+                    try_files $uri $uri/ /index.php?q=$uri&$args;
             }
 
             location ~ \.php$ {
