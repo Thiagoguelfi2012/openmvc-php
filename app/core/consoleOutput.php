@@ -54,6 +54,7 @@ class ConsoleOutput {
     }
 
     public static function progressBar($progress_percent = 0, $foreground_color = null, $text_color = null, $bar_color = null, $progress_char = "#") {
+        $progress_percent = ($progress_percent > 100 ? 100 : (int) $progress_percent);
         echo self::getColoredString("{$progress_percent}%", $text_color);
         echo self::getColoredString(" [", $foreground_color);
         echo self::getColoredString(str_repeat($progress_char, $progress_percent), $bar_color);
