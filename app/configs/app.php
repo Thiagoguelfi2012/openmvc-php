@@ -45,6 +45,12 @@ ini_set('memory_limit', '-1');
 define('TIMEZONE', 'America/Sao_Paulo');
 
 
+/** Configurações para AWS*/
+define('AWS_PUBLIC_KEY', '$YOUR-AWS-PUBLIC-KEY');
+define('AWS_SECRET_KEY', '$YOUR-AWS-SECRET-KEY');
+
+
+/** Configurações para OneSignal*/
 define('ONESIGNAL_APP_IP', '$YOUR-ONESIGNAL-APP-ID');
 define('ONESIGNAL_API_KEY', '$YOUR-ONESIGNAL-APP-KEY');
 
