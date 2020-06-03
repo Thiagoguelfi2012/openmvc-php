@@ -753,9 +753,9 @@ if (!function_exists('echo_error')) {
         }
         $c = new Controller;
         if (isset($openMVCRunFromConsole) && $openMVCRunFromConsole) {
-            console_output("ERROR:: " . get_status_header_desc($num_error) . " ({$num_error}) - ", "light_red", true);
+            console_output(file_get_contents(__DIR__ . "/templates/console_error.txt") . get_status_header_desc($num_error) . " ({$num_error}) - ", "light_red", true);
             if (OPENMVC_DEBUG) {
-                console_output(html_entity_decode(strip_tags($error_message)) . "\n", "yellow", true);
+                console_output(html_entity_decode(strip_tags($error_message)) . "\n\n", "yellow", true);
             } else {
                 echo "\n";
             }
