@@ -53,12 +53,13 @@ class ConsoleOutput {
         return $colored_string;
     }
 
-    public static function progressBar($progress_percent = 0, $foreground_color = null, $text_color = null, $bar_color = null, $progress_char = "#") {
+    public static function progressBar($progress_percent = 0, $foreground_color = 'blue', $text_color = 'white', $bar_color = 'light_green', $progress_char = "#") {
         $progress_percent = ($progress_percent > 100 ? 100 : (int) $progress_percent);
-        echo self::getColoredString("{$progress_percent}%", $text_color);
+        $size_factor = 1.4;
+        echo self::getColoredString(str_pad($progress_percent, 3, " ", STR_PAD_LEFT) . "%", $text_color);
         echo self::getColoredString(" [", $foreground_color);
-        echo self::getColoredString(str_repeat($progress_char, $progress_percent), $bar_color);
-        echo self::getColoredString(str_repeat(".", (100 - $progress_percent)), $foreground_color);
+        echo self::getColoredString(str_repeat($progress_char, round(($progress_percent / $size_factor))), $bar_color);
+        echo self::getColoredString(str_repeat(".", (round((100 / $size_factor)) - round(($progress_percent / $size_factor)))), $foreground_color);
         echo self::getColoredString("]", $foreground_color);
         if ($progress_percent >= 100) {
             self::addRow();
