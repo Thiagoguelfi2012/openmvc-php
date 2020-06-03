@@ -20,15 +20,7 @@
 ?>
 <?php
 
-// ** Configuraações do OpenMvcPHP - Essas configurações são ultilizadas para as chamadas via console do framework ** //
-//
-/** Raiz da aplicação OpenMvcPHP */
-define('OPENMVC_DOCUMENT_ROOT', str_replace('app/configs', 'public', __DIR__));
-
-/** Raiz da include_path do PHP */
-define('OPENMVC_INCLUDE_PATH', OPENMVC_DOCUMENT_ROOT);
-
-/** URL aplicação OpenMvcPHP */
+/** URL aplicação web OpenMvcPHP */
 define('OPENMVC_HTTP_HOST', 'openmvc.local');
 
 /** Ativa o Debug de aplicação OpenMvcPHP */
@@ -37,23 +29,32 @@ define('OPENMVC_DEBUG', TRUE);
 /** Raiz da include_path do PHP */
 define("OPENMVC_TMP_FOLDER", "/tmp");
 
-
+/** Limite de memória do PHP */
 ini_set('memory_limit', '-1');
-/**
- *  Timezone adequado a região
- */
+
+/** Timezone adequado a região */
 define('TIMEZONE', 'America/Sao_Paulo');
 
-
-/** Configurações para AWS*/
+/** Configurações para AWS */
 define('AWS_PUBLIC_KEY', '$YOUR-AWS-PUBLIC-KEY');
 define('AWS_SECRET_KEY', '$YOUR-AWS-SECRET-KEY');
 
 
-/** Configurações para OneSignal*/
+/** Configurações para OneSignal */
 define('ONESIGNAL_APP_IP', '$YOUR-ONESIGNAL-APP-ID');
 define('ONESIGNAL_API_KEY', '$YOUR-ONESIGNAL-APP-KEY');
 
 
-define("NOW_ACTION", @$_SERVER['REQUEST_URI']);
+
+
+
+
+
+
+
+/** Raiz da aplicação OpenMvcPHP */
+define('OPENMVC_DOCUMENT_ROOT', str_replace('app/configs', 'public', __DIR__));
+
+/** Raiz da include_path do PHP */
+define('OPENMVC_INCLUDE_PATH', OPENMVC_DOCUMENT_ROOT);
 ?>
