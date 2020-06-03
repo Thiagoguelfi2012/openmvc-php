@@ -693,7 +693,7 @@ if (!function_exists('execute_action')) {
                 } else {
                     $backtrace = debug_backtrace();
 //            pr($backtrace[0][line]);
-                    echo_error("A action <b>{$action}()</b> n&atilde;o foi encontrada no arquivo <b>$controller_path</b>!<br> Verifique o controller.<p><b>execute_action(\"{$controller}\",\"{$action}\")</b> em {$backtrace[0]['file']} na linha {$backtrace[0]['line']}</p>", 500);
+                    echo_error("A action <b>{$action}()</b> n&atilde;o foi encontrada no arquivo <b>$controller_path</b>!<br> Verifique o controller \"" . ucfirst($controller) . "\".<p>\n</p>", 500);
                 }
             } catch (Exception $e) {
                 echo_error("Exceção capturada: {$e->getMessage()}", 500);
@@ -701,7 +701,7 @@ if (!function_exists('execute_action')) {
             }
         } else {
             $backtrace = debug_backtrace();
-            echo_error("O Arquivo <b>$controller_path</b> n&atilde;o foi encontrado!<br> Verifique as rotas ou se o arquivo existe e suas permiss&otilde;es.<p><b>execute_action(\"{$controller}\",\"{$action}\")</b> em {$backtrace[0]['file']} na linha {$backtrace[0]['line']}</p>", 404);
+            echo_error("O Arquivo <b>$controller_path</b> n&atilde;o foi encontrado!\nVerifique as rotas ou se o arquivo existe e suas permiss&otilde;es.", 404);
         }
     }
 
@@ -753,7 +753,7 @@ if (!function_exists('echo_error')) {
         }
         $c = new Controller;
         if (isset($openMVCRunFromConsole) && $openMVCRunFromConsole) {
-            console_output(file_get_contents(__DIR__ . "/templates/console_error.txt") . get_status_header_desc($num_error) . " ({$num_error}) - ", "light_red", true);
+            console_output(file_get_contents(__DIR__ . "/templates/console_error.txt") . get_status_header_desc($num_error) . " ({$num_error}) \n", "light_red", true);
             if (OPENMVC_DEBUG) {
                 console_output(html_entity_decode(strip_tags($error_message)) . "\n\n", "yellow", true);
             } else {
