@@ -1,10 +1,11 @@
+
 ----  OpenMvc PHP Framework V2.0  ----
 =============================
-OpenMvcPHP é um framework Open Source baseada no conceito de MVC ou seja, Models(Banco de Dados), Views(Html e Css) e Controllers(Regras de Negócio).
+OpenMvcPHP é um framework Open Source baseada no conceito de MVC ou seja, Models(Banco de Dados), Views(Html e Css ou Interface de console) e Controllers(Regras de Negócio).
 
 Requisitos Mínimos:
 ============
-- Nginx ou (Apache2 + mod_rewrite)
+- Nginx ou (Apache2 + mod_rewrite) caso queira criar uma aplicação web
 - Mysql >= 5.4
 - PHP >= 5.1
 
@@ -13,11 +14,8 @@ Instalação:
 
  - Passo 1: Clonar o OpenMvc e iniciar um projeto
  
-
- 
-git clone https://bitbucket.org/bswsteam/openmvc-php-framework.git
-
-git remote set-url origin https://bitbucket.org/user/$NOVO_REPOSITORIO.git
+		git clone https://bitbucket.org/bswsteam/openmvc-php-framework.git
+		git remote set-url origin https://bitbucket.org/user/$NOVO_REPOSITORIO.git
 
 ____________________________________________________________________________________________________________________
 
@@ -161,7 +159,11 @@ ________________________________________________________________________________
 
  - Você também pode adicionar rotas customizadas no arquivo app/configs/routes.php. Por exemplo:
 
-Adicionando a rota: ["route" => "test-route", "controller" => "common", "action" => "index"] no arquivo de configurações,
+Adicionando a rota: 
+
+    ["route" => "test-route", "controller" => "common", "action" => "index"]
+
+ no arquivo de configurações,
 ao acessar o endereço http://openmvc.exemplo.com/test-route a rota traçada seria dentro do controller 'common.php' a action 'index()'.
 
 
@@ -205,17 +207,23 @@ ________________________________________________________________________________
    
   Por Exemplo:
   
--No caso abaixo carregaremos dentro da variável $this o component PHPMailer,  e a mesma terá toda a Classe PHPMailer carregada no objeto $this->PHPMailer
+-No caso abaixo carregaremos dentro da variável $this o componente PHPMailer,  e a mesma terá toda a Classe PHPMailer carregada no objeto $this->PHPMailer
+
     $this->load('components','PHPMailer');
+-No caso abaixo carregaremos dentro da variável $this o componente Threads
+
+    $this->load('components','Threads');    
 
 
 -No caso abaixo carregaremos dentro da variável $this o arquivo /models/exemploModel.php, e a mesma terá toda a Classe ExemploModel carregada no objeto $this->exemploModel
-    $this->load('models','exemploModel');
+
+		$this->load('models','exemploModel');
 
 
 - No caso abaixo carregaremos dentro da variável $this o arquivo /controllers/meu_controller2.php, e a mesma terá toda a Classe Meu_controller2 carregada no objeto $this->meu_controller2
 
-    $this->load('controllers','meu_controller2');
+		$this->load('controllers','meu_controller2');
+
 ___________________________________________________________________________________________________________________
 
 
@@ -318,6 +326,7 @@ Neste caso faremos o INSERT de uma nova linha da tabela default.
 
     $dados = (object) array("nome"=>"teste", "email"=>"bbb@exemplo.com" );
     return $this->save($dados);
+
 ______________________________________________________________________________________________________________
 
   
@@ -342,31 +351,30 @@ Exemplo:
 
 Neste caso listaremos todas as linhas da tabela default do model
 
-$lista = $this->listar();
+    $lista = $this->listar();
 
 
 
 Neste caso listaremos as 10 primeiras linhas para a pagina 1 da paginaçao da tabela default do model
 
-$lista = $this->listar(1,10);
-
+    $lista = $this->listar(1,10);
 
 
 Neste caso listaremos as 10 proximas linhas para a pagina 2 da paginaçao da tabela default do model
 
-$lista = $this->listar(2,10);
-
+    $lista = $this->listar(2,10);
 
 
 Neste caso listaremos as 10 primeiras linhas para a pagina 1 da paginaçao onde a coluna 'status' seja igual 123 da tabela default do model
 
-$lista = $this->listar(1,10,123);
+    $lista = $this->listar(1,10,123);
 
 
 
 Neste caso listaremos todas as linhas onde a coluna 'status' seja igual 123 da tabela default do model
 
-$lista = $this->listar('','',123);
+    $lista = $this->listar('','',123);
+
 ______________________________________________________________________________________________________________
   
 
@@ -384,7 +392,8 @@ ________________________________________________________________________________
 
 Exemplo:
 
-$linha = $this->get($id);
+    $linha = $this->get($id);
+
 ______________________________________________________________________________________________________________
   
   
@@ -403,9 +412,10 @@ ________________________________________________________________________________
 
 Exemplo:
 
-$query = "SELECT * FROM tabela_exemplo";
+    $query = "SELECT * FROM tabela_exemplo";
+    
+    $objeto = $this->query($query);
 
-$objeto = $this->query($query);
 ______________________________________________________________________________________________________________
   
   
@@ -425,9 +435,10 @@ ________________________________________________________________________________
 
 Exemplo:
 
-$query = "SELECT * FROM tabela_exemplo WHERE id=10";
+    $query = "SELECT * FROM tabela_exemplo WHERE id=10";
+    
+    $objeto = $this->row($query);
 
-$objeto = $this->row($query);
 ______________________________________________________________________________________________________________
   
   
@@ -456,15 +467,16 @@ ________________________________________________________________________________
 
 Exemplo:
 
-$data = array('coluna' => 'valor');
+    $data = array('coluna' => 'valor');
+    
+    $where = array('coluna' => 'valor');
+    
+    $retorno = $this->updateWhere($data, $where);
 
-$where = array('coluna' => 'valor');
+   ou ainda
 
-$retorno = $this->updateWhere($data, $where);
+    $retorno = $this->updateWhere($data, $where, 'AND', '=', $nome_da_tabela);
 
-    ou ainda
-
-$retorno = $this->updateWhere($data, $where, 'AND', '=', $nome_da_tabela);
 ______________________________________________________________________________________________________________
 ______________________________________________________________________________________________________________
   
@@ -486,9 +498,9 @@ ________________________________________________________________________________
 
 Exemplo:
 
-$retorno = $this->create(array('id' => 1,'coluna' => 'valor'));
-$retorno->getId();
-$retorno->getColuna();
+    $retorno = $this->create(array('id' => 1,'coluna' => 'valor'));
+    $retorno->getId();
+    $retorno->getColuna();
 
 ______________________________________________________________________________________________________________
 
@@ -515,27 +527,34 @@ ________________________________________________________________________________
 
 Exemplo:
 
- $conditions = array("colunaA <=" => 123, "colunaB IS NOT" => "NULL", "colunaC" => "AB");
- $this->find($conditions);
+     $conditions = array("colunaA <=" => 123, "colunaB IS NOT" => "NULL", "colunaC" => "AB");
+     $this->find($conditions);
+
   
 O exemplo acima retornará o resultado da Query:
-SELECT * FROM [tabela_do_model] WHERE colunaA <= 123 AND colunaB IS NOT NULL AND colunaC = "AB";
+
+    SELECT * FROM [tabela_do_model] WHERE colunaA <= 123 AND colunaB IS NOT NULL AND colunaC = "AB";
 
  --------------------------------------------------------------------
 
- $conditions = array("colunaA <=" => 123, "colunaB IS NOT" => "NULL", "colunaC" => array("a", "b", "c"));
- $this->find($conditions);
+     $conditions = array("colunaA <=" => 123, "colunaB IS NOT" => "NULL", "colunaC" => array("a", "b", "c"));
+     $this->find($conditions);
+
   
 O exemplo acima retornará o resultado da Query:
-SELECT * FROM [tabela_do_model] WHERE colunaA <= 123 AND colunaB IS NOT NULL AND colunaC in("a","b","c");
+
+    SELECT * FROM [tabela_do_model] WHERE colunaA <= 123 AND colunaB IS NOT NULL AND colunaC in("a","b","c");
 
  --------------------------------------------------------------------
 
- $conditions = array("colunaA" => "c", "colunaB" => "d");
- $this->find($conditions, "*", "OR", "!=");
+     $conditions = array("colunaA" => "c", "colunaB" => "d");
+     $this->find($conditions, "*", "OR", "!=");
+
   
 O exemplo acima retornará o resultado da Query:
-SELECT * FROM [tabela_do_model] WHERE colunaA != "c" OR colunaB != "d";
+
+    SELECT * FROM [tabela_do_model] WHERE colunaA != "c" OR colunaB != "d";
+
  --------------------------------------------------------------------
 
 ______________________________________________________________________________________________________________
@@ -564,11 +583,13 @@ ________________________________________________________________________________
 
 Exemplo:
 
- $conditions = array("colunaA <=" => 123, "colunaB IS NOT" => "NULL", "colunaC" => "AB");
- $this->findAll($conditions);
+     $conditions = array("colunaA <=" => 123, "colunaB IS NOT" => "NULL", "colunaC" => "AB");
+     $this->findAll($conditions);
+
   
 O exemplo acima retornará o resultado da Query:
-SELECT * FROM [tabela_do_model] WHERE colunaA <= 123 AND colunaB IS NOT NULL AND colunaC = "AB" + [RELACIONAMENTOS ENCONTRADOS NA TABELA];
+
+    SELECT * FROM [tabela_do_model] WHERE colunaA <= 123 AND colunaB IS NOT NULL AND colunaC = "AB" + [RELACIONAMENTOS ENCONTRADOS NA TABELA];
 
 
 ______________________________________________________________________________________________________________
@@ -599,23 +620,27 @@ ________________________________________________________________________________
 
 Exemplo:
 
- $conditions = array("colunaA <=" => 123, "colunaB IS NOT" => "NULL", "colunaC" => "AB");
- $conditionsJoin = array("tabelaJoin.tabela_exemplo_id" => "[tabela_do_model].id");
- $this->join($conditionsJoin, "tabelaJoin")
-      ->find(conditions);
+     $conditions = array("colunaA <=" => 123, "colunaB IS NOT" => "NULL", "colunaC" => "AB");
+     $conditionsJoin = array("tabelaJoin.tabela_exemplo_id" => "[tabela_do_model].id");
+     $this->join($conditionsJoin, "tabelaJoin")
+          ->find(conditions);
+
   
 O exemplo acima retornará o resultado da Query:
-SELECT * FROM [tabela_do_model] JOIN tabelaJoin ON(tabelaJoin.tabela_exemplo_id = [tabela_do_model].id) WHERE colunaA <= 123 AND colunaB IS NOT NULL AND colunaC = "AB";
+
+    SELECT * FROM [tabela_do_model] JOIN tabelaJoin ON(tabelaJoin.tabela_exemplo_id = [tabela_do_model].id) WHERE colunaA <= 123 AND colunaB IS NOT NULL AND colunaC = "AB";
 
 ---------------------------------------------------------
 
- $conditions = array("colunaA <=" => 123, "colunaB IS NOT" => "NULL", "colunaC" => "AB");
- $conditionsJoin = array("tabelaJoin.tabela_exemplo_id" => "[tabela_do_model].id");
- $this->join($conditionsJoin, "tabelaJoin", "INNER")
-      ->find(conditions);
+     $conditions = array("colunaA <=" => 123, "colunaB IS NOT" => "NULL", "colunaC" => "AB");
+     $conditionsJoin = array("tabelaJoin.tabela_exemplo_id" => "[tabela_do_model].id");
+     $this->join($conditionsJoin, "tabelaJoin", "INNER")
+          ->find(conditions);
+
   
 O exemplo acima retornará o resultado da Query:
-SELECT * FROM [tabela_do_model] INNER JOIN tabelaJoin ON(tabelaJoin.tabela_exemplo_id = [tabela_do_model].id) WHERE colunaA <= 123 AND colunaB IS NOT NULL AND colunaC = "AB";
+
+    SELECT * FROM [tabela_do_model] INNER JOIN tabelaJoin ON(tabelaJoin.tabela_exemplo_id = [tabela_do_model].id) WHERE colunaA <= 123 AND colunaB IS NOT NULL AND colunaC = "AB";
 
 
 
@@ -637,9 +662,8 @@ ________________________________________________________________________________
     Exemplo:
     Neste caso faremos o DELETE de todas as linhas onde a coluna nome for igual a "teste" e a coluna email for igual a "bbb@exemplo.com"
 
-    $dados = (object) array("nome"=>"teste", "email"=>"bbb@exemplo.com" );
-
-    return $this->deleteWhere($dados);
+	    $dados = (object) array("nome"=>"teste", "email"=>"bbb@exemplo.com" );
+	    return $this->deleteWhere($dados);
 
 _____________________________________________________________________________________________________________
   
@@ -666,11 +690,11 @@ Exemplo:
 Nesse caso iremos fazer uma requisição por post no controller 'common' na action 'teste()'
 
 
-jQuery.ajax({
-                url: "/ajax.php",
-                type: "post",
-                data: {c:'common', a:'teste'}
-            })
+    jQuery.ajax({
+                    url: "/ajax.php",
+                    type: "post",
+                    data: {c:'common', a:'teste'}
+                })
 
 ______________________________________________________________________________________________________________
 
@@ -706,25 +730,64 @@ https://github.com/PHPMailer/PHPMailer/wiki
 
 __________________________________________________________________________________________________
 
+Threads
+=====================================
+Classe para abertura de threads em PHP
+
+ - 1: Carregue o componente Threads em sua função.
+ - 2: Execute os threads que desejar.
+ - 3: Capture o output de todos eles e siga com o seu processo. 
+
+Exemplo:
+
+    class Common extends Controller {
+    
+        public function test() {
+            $start = microtime(true);
+            $this->load("components", "Threads");
+            $this->Threads->execute("common", "a", "string");
+            $this->Threads->execute("common", "a", true);
+            $this->Threads->execute("common", "a", (object) ["key" => "value"]);
+            $this->Threads->execute("common", "a", ["key" => "value"]);
+            $this->Threads->execute("common", "b", 127);
+            $this->Threads->execute("common", "b", 0.57638);
+            $out = $this->Threads->output();
+            var_dump($out);
+            echo "\n" . (microtime(true) - $start) . " secs\n";
+        }
+    
+        public function b($var) {
+    	return //do something...
+        }
+    
+        public function a($param) {
+            sleep(10);
+            return $param;
+        }
+        ...
+
+__________________________________________________________________________________________________
+
 Multimysql
 =====================================
+
     define("MULTIMYSQL_DBUSER", $DB_USER);
     define("MULTIMYSQL_DBPASS", $DB_PASSWORD);
     define("MULTIMYSQL_DBNAME", $DB_NAME);
     define("MULTIMYSQL_DBHOST", $DB_HOST);
     $this->load("components", "Multimysql");
-
+    
     #O MULTIMYSQL CONTEMPLA TODAS AS FUNÇÕES DO MODEL MAIS AS LISTADAS ABAIXO
-
+    
     #list row
     $xpto = $this->Multimysql->get_row("SELECT * FROM example WHERE 1 limit 1");
-
+    
     #list result of query limit 10
     $xpto = $this->Multimysql->get_results("SELECT * FROM example WHERE 1 limit 10");
-
+    
     #insert data
     $xpto = $this->Multimysql->insert("example_table",array("title"=>"ABC","description"=>"xpto lorem"));
-
+    
     #update data
     $xpto = $this->Multimysql->update("example_table",array("title"=>"ABC","description"=>"xpto lorem"),array("id"=>10));
 
@@ -736,5 +799,12 @@ ________________________________________________________________________________
 Licença:
 ========
 
-- Created by Thiago Valentoni Guelfi - 2013/2018
+- Created by Thiago Valentoni Guelfi - 2013/2020
 - Open Source - Licença Pública Geral GNU
+
+Contribuições:
+========
+Fulvius Guelfi
+João Escribano [https://github.com/joaoescribano/](https://github.com/joaoescribano/)
+
+
