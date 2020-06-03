@@ -21,16 +21,16 @@
 <?php
 
 @session_start();
-require_once 'color.class.php';
+require_once 'consoleOutput.php';
 
 function console_output($string, $color = "white", $noInfo = false, $resetColor = true) {
     $finalLine = "";
 
     if (!$noInfo) {
-        $finalLine .= ConsoleColors::getColoredString("[" . date("Y-m-d H:i:s") . "]", 'purple') . " ";
+        $finalLine .= ConsoleOutput::getColoredString("[" . date("Y-m-d H:i:s") . "]", 'purple') . " ";
     }
 
-    echo $ret = $finalLine . ConsoleColors::getColoredString($string, $color, null, $resetColor);
+    echo $ret = $finalLine . ConsoleOutput::getColoredString($string, $color, null, $resetColor);
     return $ret;
 }
 

@@ -1,13 +1,12 @@
 <?php
 
-class ConsoleColors {
+class ConsoleOutput {
 
     private static $foreground_colors = array();
     private static $background_colors = array();
 
     public function __construct() {
         // Set up shell colors
-        self::$foreground_colors['default'] = '0';
         self::$foreground_colors['black'] = '0;30';
         self::$foreground_colors['dark_gray'] = '1;30';
         self::$foreground_colors['blue'] = '0;34';
@@ -36,7 +35,7 @@ class ConsoleColors {
     }
 
     // Returns colored string
-    public static function getColoredString($string, $foreground_color = null, $background_color = null, $resetColor = true) {
+    public static function getColoredString($string, $foreground_color = null, $background_color = null) {
         $colored_string = "";
 
         // Check if given foreground color found
@@ -47,12 +46,40 @@ class ConsoleColors {
         if (isset(self::$background_colors[$background_color])) {
             $colored_string .= "\033[" . self::$background_colors[$background_color] . "m";
         }
-        if ($resetColor) {
-            // Add string and end coloring
-            $colored_string .= $string . "\033[0m";
-        }
+
+        // Add string and end coloring
+        $colored_string .= $string . "\033[0m";
 
         return $colored_string;
+    }
+
+    public static function progressBar($progress_percent = 0, $foreground_color = null, $text_color = null, $bar_color = null, $progress_char = "#") {
+        echo self::getColoredString("{$progress_percent}%", $text_color);
+        echo self::getColoredString(" [", $foreground_color);
+        echo self::getColoredString(str_repeat($progress_char, $progress_percent), $bar_color);
+        echo self::getColoredString(str_repeat(".", (100 - $progress_percent)), $foreground_color);
+        echo self::getColoredString("]", $foreground_color);
+        return __CLASS__;
+    }
+
+    public static function tab() {
+        echo self::getColoredString("\t");
+        return __CLASS__;
+    }
+
+    public static function removeRow() {
+        echo self::getColoredString("\r");
+        return __CLASS__;
+    }
+
+    public static function addRow() {
+        echo self::getColoredString("\n");
+        return __CLASS__;
+    }
+
+    public static function prints($string, $foreground_color = null, $background_color = null) {
+        echo self::getColoredString($string, $foreground_color, $background_color);
+        return __CLASS__;
     }
 
     // Returns all foreground color names
@@ -67,4 +94,4 @@ class ConsoleColors {
 
 }
 
-$ConsoleColors = new ConsoleColors();
+new ConsoleOutput();
