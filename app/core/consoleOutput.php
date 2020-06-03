@@ -59,6 +59,9 @@ class ConsoleOutput {
         echo self::getColoredString(str_repeat($progress_char, $progress_percent), $bar_color);
         echo self::getColoredString(str_repeat(".", (100 - $progress_percent)), $foreground_color);
         echo self::getColoredString("]", $foreground_color);
+        if ($progress_percent >= 100) {
+            self::addRow();
+        }
         return __CLASS__;
     }
 
