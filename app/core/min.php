@@ -113,7 +113,7 @@ function parse_view_console($html) {
 }
 
 $fileAutoLoad = "{$_SERVER['DOCUMENT_ROOT']}/../app/configs/autoload.php";
-$OPENMVC_THREAD_OUTPUT = ($_REQUEST['a'] == "openmvc_run_thread" ? true : false);
+$OPENMVC_THREAD_OUTPUT = (isset($_REQUEST['a']) && $_REQUEST['a'] == "openmvc_run_thread" ? true : false);
 
 if (!$OPENMVC_THREAD_OUTPUT) {
     if (isset($openMVCRunFromConsole) && $openMVCRunFromConsole) {
