@@ -40,10 +40,12 @@ class Loader {
      * @param String $item
      * @param String $name
      */
-    public function load($item, $name) {
+     public function load($item, $name) {
         try {
-            $loadedItem = $this->getLoadedItem($item, $name);
-
+            $parentClass = debug_backtrace()[1]['class'];
+            $itemRegisterName = (!empty($parentClass) ? "{$parentClass}_{$item}" : $item);
+            
+            $loadedItem = $this->getLoadedItem($itemRegisterName, $name);
             if (null !== $loadedItem) {
                 return $loadedItem;
             }
@@ -71,7 +73,7 @@ class Loader {
             else
                 $instance = new $klass($name);
 
-            $this->registerLoadedItem($item, $name, $instance);
+            $this->registerLoadedItem($itemRegisterName, $name, $instance);
         } catch (Exception $e) {
             echo_error("Exceção capturada: {$e->getMessage()}", 'Exception');
 //            echo 'Exceção capturada: ', $e->getMessage(), "\n";
