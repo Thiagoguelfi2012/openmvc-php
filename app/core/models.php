@@ -57,7 +57,7 @@ class Model extends Loader {
         $return = $this->db->get_results($sql);
         if (!empty($return)) {
             foreach ($return as &$row) {
-                $row = $this->load($row);
+                $row = $this->loadPersistence($row);
             }
         }
         return $return;
@@ -66,7 +66,7 @@ class Model extends Loader {
     public function row($sql) {
         $row = $this->db->get_row($sql);
         if (!empty($row)) {
-            return $this->load($row);
+            return $this->loadPersistence($row);
         } else {
             return null;
         }
@@ -77,14 +77,14 @@ class Model extends Loader {
     }
 
     public function get_row($sql) {
-        return $this->load($this->db->get_row($sql));
+        return $this->loadPersistence($this->db->get_row($sql));
     }
 
     public function get_results($sql) {
         $return = $this->db->get_results($sql);
         if (!empty($return)) {
             foreach ($return as $key => &$value) {
-                $value = $this->load($value);
+                $value = $this->loadPersistence($value);
             }
         }
         return $return;
@@ -336,10 +336,10 @@ class Model extends Loader {
     }
 
     public function create($obj = null, $cleanObject = true) {
-        return $this->load($obj, $cleanObject);
+        return $this->loadPersistence($obj, $cleanObject);
     }
 
-    public function load($obj = [], $cleanObject = false) {
+    public function loadPersistence($obj = [], $cleanObject = false) {
         $obj = (array) $obj;
         $internal = [];
         if ($cleanObject && !empty($this->tableDesc)) {
