@@ -445,8 +445,17 @@ class Model extends Loader {
      * @param string $operator
      */
     public function find($params = array(), $fields = "*", $join = 'AND', $operator = '=', $order = "") {
-        if (is_array(end($params))) {
-            $join = "OR";
+        if (!empty($params)) {
+            $isOr = true;
+            foreach ($params as $key => $value) {
+                if (!is_numeric($key) || strtolower(gettype($value)) != "array") {
+                    $isOr = false;
+                    break;
+                }
+            }
+            if ($isOr) {
+                $join = "OR";
+            }
         }
         $where = $this->buildWhere($params, $join, true, $operator);
         $sql = "SELECT " . (is_array($fields) ? implode(", ", $fields) : $fields) . " FROM {$this->name} " . (!empty($this->joins) ? implode(" ", $this->joins) : "") . " {$where} {$order}";
