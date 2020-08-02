@@ -619,10 +619,8 @@ class Model extends Loader {
                         $joined_values = array();
                         $joined = false;
                         foreach ($val as $in_key => $in_val) {
-                            if (is_numeric($in_val)) {
-                                $joined_values[] = is_numeric($in_val) ? $in_val : "'{$in_val}'";
-                                $joined = true;
-                            }
+                            $joined_values[] = is_numeric($in_val) ? $in_val : "'{$in_val}'";
+                            $joined = true;
 
                             if (is_string($in_key)) {
                                 if (!strstr($in_key, " LIKE%%")) {
@@ -654,7 +652,7 @@ class Model extends Loader {
                         if (strstr($key, " ")) {
                             $tmpKey = explode(" ", $key);
                         }
-                        $_conditions[$key] = "`{$tmpKey[0]}` {$tmpKey[1]}". (is_string($val) ? ($val == "NULL" ? $val : "'" . str_replace('"', "'", $val) . "'" ) : $val);
+                        $_conditions[$key] = "`{$tmpKey[0]}` {$tmpKey[1]}" . (is_string($val) ? ($val == "NULL" ? $val : "'" . str_replace('"', "'", $val) . "'" ) : $val);
                         unset($tmpKey);
                     }
                 }
