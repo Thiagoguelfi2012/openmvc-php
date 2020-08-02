@@ -650,7 +650,12 @@ class Model extends Loader {
                             }
                         }
                     } else {
-                        $_conditions[$key] = "`{$key}` " . (strstr($key, " ") ? "" : $operator) . (is_string($val) ? ($val == "NULL" ? $val : "'" . str_replace('"', "'", $val) . "'" ) : $val);
+                        $tmpKey = [$key, $operator];
+                        if (strstr($key, " ")) {
+                            $tmpKey = explode(" ", $key);
+                        }
+                        $_conditions[$key] = "`{$tmpKey[0]}` {$tmpKey[1]}". (is_string($val) ? ($val == "NULL" ? $val : "'" . str_replace('"', "'", $val) . "'" ) : $val);
+                        unset($tmpKey);
                     }
                 }
                 $join = strtoupper($join);
