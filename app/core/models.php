@@ -608,10 +608,10 @@ class Model extends Loader {
                     if (strtoupper($operator) == "LIKE") {
                         $_conditions[] = "`{$key}` LIKE '%{$val}%'";
                     } else if (strstr($key, " LIKE%%")) {
-                        $_conditions[] = "`".str_replace("LIKE%%", "", $key) . "` LIKE '%{$val}%'";
+                        $_conditions[] = "`" . trim(str_replace("LIKE%%", "", $key)) . "` LIKE '%{$val}%'";
                     } else if ($val == NULL) {
                         if (substr(mb_strtoupper($key), -3) == "NOT") {
-                            $_conditions[] = "`".substr($key, -3) . "` IS NOT NULL";
+                            $_conditions[] = "`" . trim(substr($key, 0, -3)) . "` IS NOT NULL";
                         } else {
                             $_conditions[] = " `$key` IS NULL";
                         }
@@ -646,11 +646,10 @@ class Model extends Loader {
                         if ($joined) {
                             if (is_string($key)) {
                                 $joined_valuesSTR = join(',', $joined_values);
-                                $_conditions[] = "{$key} IN ({$joined_valuesSTR})";
+                                $_conditions[] = "`{$key}` IN ({$joined_valuesSTR})";
                             }
                         }
                     } else {
-//                        $_conditions[] = "(" . $this->buildWhere($params, "OR", false, $operator) . ")";
                         $_conditions[$key] = "`{$key}` " . (strstr($key, " ") ? "" : $operator) . (is_string($val) ? ($val == "NULL" ? $val : "'" . str_replace('"', "'", $val) . "'" ) : $val);
                     }
                 }
