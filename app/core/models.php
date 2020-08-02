@@ -606,14 +606,14 @@ class Model extends Loader {
                 $lastKey = -1;
                 foreach ($params as $key => $val) {
                     if (strtoupper($operator) == "LIKE") {
-                        $_conditions[] = "{$key} LIKE '%{$val}%'";
+                        $_conditions[] = "`{$key}` LIKE '%{$val}%'";
                     } else if (strstr($key, " LIKE%%")) {
-                        $_conditions[] = str_replace("LIKE%%", "", $key) . " LIKE '%{$val}%'";
+                        $_conditions[] = "`".str_replace("LIKE%%", "", $key) . "` LIKE '%{$val}%'";
                     } else if ($val == NULL) {
                         if (substr(mb_strtoupper($key), -3) == "NOT") {
-                            $_conditions[] = substr($key, -3) . " IS NOT NULL";
+                            $_conditions[] = "`".substr($key, -3) . "` IS NOT NULL";
                         } else {
-                            $_conditions[] = " $key IS NULL";
+                            $_conditions[] = " `$key` IS NULL";
                         }
                     } else if (is_array($val) && !empty($val)) {
                         $joined_values = array();
@@ -651,7 +651,7 @@ class Model extends Loader {
                         }
                     } else {
 //                        $_conditions[] = "(" . $this->buildWhere($params, "OR", false, $operator) . ")";
-                        $_conditions[$key] = "{$key} " . (strstr($key, " ") ? "" : $operator) . (is_string($val) ? ($val == "NULL" ? $val : "'" . str_replace('"', "'", $val) . "'" ) : $val);
+                        $_conditions[$key] = "`{$key}` " . (strstr($key, " ") ? "" : $operator) . (is_string($val) ? ($val == "NULL" ? $val : "'" . str_replace('"', "'", $val) . "'" ) : $val);
                     }
                 }
                 $join = strtoupper($join);
