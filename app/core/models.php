@@ -618,7 +618,7 @@ class Model extends Loader {
                         $_conditions[] = "`{$key}` LIKE '%{$val}%'";
                     } else if (strstr($key, " LIKE%%")) {
                         $_conditions[] = "`" . trim(str_replace("LIKE%%", "", $key)) . "` LIKE '%{$val}%'";
-                    } else if ($val == NULL) {
+                    } else if ($val === NULL) {
                         if (substr(mb_strtoupper($key), -3) == "NOT") {
                             $_conditions[] = "`" . trim(substr($key, 0, -3)) . "` IS NOT NULL";
                         } else {
