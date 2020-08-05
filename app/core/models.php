@@ -399,7 +399,7 @@ class Model extends Loader {
             $id = !empty($dados['ID']) ? $dados['ID'] : null;
             unset($dados['ID']);
         }
-
+        $dados = $this->sanitize($dados);
         if (null !== $id) {
             $this->generateUpdate($this->name, $dados, $id);
         } else {
@@ -412,6 +412,18 @@ class Model extends Loader {
             $id = !empty($this->db->insert_id) ? $this->db->insert_id : $id;
             return $id;
         }
+    }
+    
+    public function sanitize($dados) {
+        if (!empty($dados)) {
+            $allowedFields = (array_column($this->tableDesc, 'Field'));
+            foreach ($dados as $key => $value) {
+                if (!in_array($key, $allowedFields)) {
+                    unset($dados[$key]);
+                }
+            }
+        }
+        return $dados;
     }
 
     public function count($params = array()) {
@@ -615,14 +627,14 @@ class Model extends Loader {
                 $lastKey = -1;
                 foreach ($params as $key => $val) {
                     if (strtoupper($operator) == "LIKE") {
-                        $_conditions[] = "`{$key}` LIKE '%{$val}%'";
+                        $_conditions[] = "`". str_replace(".", "`.`", $key)."` LIKE '%{$val}%'";
                     } else if (strstr($key, " LIKE%%")) {
-                        $_conditions[] = "`" . trim(str_replace("LIKE%%", "", $key)) . "` LIKE '%{$val}%'";
+                        $_conditions[] = "`" . trim(str_replace("LIKE%%", "", str_replace(".", "`.`", $key))) . "` LIKE '%{$val}%'";
                     } else if ($val === NULL) {
                         if (substr(mb_strtoupper($key), -3) == "NOT") {
-                            $_conditions[] = "`" . trim(substr($key, 0, -3)) . "` IS NOT NULL";
+                            $_conditions[] = "`" . trim(substr(str_replace(".", "`.`", $key), 0, -3)) . "` IS NOT NULL";
                         } else {
-                            $_conditions[] = " `$key` IS NULL";
+                            $_conditions[] = "`".str_replace(".", "`.`", $key)."` IS NULL";
                         }
                     } else if (is_array($val) && !empty($val)) {
                         $joined_values = array();
@@ -653,7 +665,7 @@ class Model extends Loader {
                         if ($joined) {
                             if (is_string($key)) {
                                 $joined_valuesSTR = join(',', $joined_values);
-                                $_conditions[] = "`{$key}` IN ({$joined_valuesSTR})";
+                                $_conditions[] = "`".str_replace(".", "`.`", $key)."` IN ({$joined_valuesSTR})";
                             }
                         }
                     } else {
@@ -661,7 +673,7 @@ class Model extends Loader {
                         if (strstr($key, " ")) {
                             $tmpKey = explode(" ", $key);
                         }
-                        $_conditions[$key] = "`{$tmpKey[0]}` {$tmpKey[1]}" . (is_string($val) ? ($val == "NULL" ? $val : "'" . str_replace('"', "'", $val) . "'" ) : $val);
+                        $_conditions[$key] = "`".str_replace(".", "`.`", $tmpKey[0])."` {$tmpKey[1]}" . (is_string($val) ? ($val == "NULL" ? $val : "'" . str_replace('"', "'", $val) . "'" ) : $val);
                         unset($tmpKey);
                     }
                 }
