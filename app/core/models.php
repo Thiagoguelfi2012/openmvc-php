@@ -32,7 +32,7 @@ class Model extends Loader {
     var $joins;
     var $tableDesc;
 
-    public function __construct($db = null) {
+    public function __construct($db = null, $name = null) {
         parent::__construct();
         if ($db == null) {
             global $db;
@@ -40,6 +40,9 @@ class Model extends Loader {
         }
         $this->db = $db;
         $this->init();
+        if (!empty($name)) {
+            $this->name = $name;
+        }
         if (!empty($this->name)) {
             $this->tableDesc = $this->db->get_results("DESCRIBE {$this->name}");
         }

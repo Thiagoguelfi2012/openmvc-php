@@ -6,6 +6,7 @@ class modelObject {
     private $functions;
     private $table;
     private $object;
+    private $model;
 
     function __construct($fields) {
         $this->table = "**tableName**";
@@ -34,6 +35,14 @@ class modelObject {
 
     public function internalObject() {
         return (object) $this->object;
+    }
+
+    public function save() {
+        if (empty($this->model)) {
+            global $db;
+            $this->model = new Model($db, $this->table);
+        }
+        return $this->model->save($this);
     }
 
     public function __call($method, $arguments) {
