@@ -37,6 +37,7 @@ class modelObject {
             global $db;
             $this->model = new Model($db, $this->table);
         }
+        return $this->model;
     }
 
     public function internalObject() {
@@ -44,13 +45,11 @@ class modelObject {
     }
 
     public function save() {
-        $this->model();
-        return $this->model->save($this);
+        return $this->model()->save($this);
     }
 
     public function delete() {
-        $this->model();
-        return $this->model->delete($this->getId());
+        return $this->model()->delete($this->getId());
     }
 
     public function __call($method, $arguments) {
