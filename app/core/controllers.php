@@ -28,11 +28,8 @@ class Controller extends Loader {
     var $layout;
     var $params = array();
 
-    public function __construct($name = null, $action = null) {
+    public function __construct() {
         $this->helpers = array();
-        $this->name = $name;
-        $this->action = $action;
-
         $this->init();
     }
 
@@ -44,20 +41,8 @@ class Controller extends Loader {
         
     }
 
-    /*
-     * Please Override Me :)
-     */
-
     public function init() {
         
-    }
-
-    public function getName() {
-        return $this->name;
-    }
-
-    public function getAction() {
-        return $this->action;
     }
 
     public function lockActionToConsole($msg = null) {
@@ -155,17 +140,6 @@ class Controller extends Loader {
     }
 
     /**
-     * Compara a action com a ação atual
-     * @param Sring $action
-     */
-    public function compareAction($action) {
-        if ($this->getAction() == $action)
-            return true;
-        else
-            return false;
-    }
-
-    /**
      * 	Redirecionamento basiado no framework cakePHP
      * 
      *     Como Usar:
@@ -188,49 +162,6 @@ class Controller extends Loader {
      * @param Array $params
      */
     public function redirect($url, $params = array()) {
-
-        $wp_url = '/';
-        if (is_array($url)) {
-            if (isset($url["controller"]))
-                Mvc::add_controller($url["controller"]);
-            if (!isset($url["action"]))
-                $action = "index";
-            else
-                $action = $url["action"];
-            $controller = Mvc::getDipatcher();
-            $url = "{$controller->name}/{$action}";
-            if (!empty($params)) {
-                if ($this->hasArrayinArray($params)) {
-                    call_user_func_array(array($controller, $action), $params);
-                    die;
-                }
-                $params = $this->bindParams($params);
-                $url = "{$url}{$params}";
-                echo "<meta http-equiv='refresh' content='0;url={$url}' >";
-                die;
-            }
-        } else {
-            if (stristr($url, "http://"))
-                $this->out_redirect($url);
-
-            $split_url = explode("/", $url);
-            if (count($split_url) == 1) {
-                $controller = Mvc::getDipatcher()->getName();
-                $action = $url;
-                $url = "{$controller}/{$action}";
-            }
-        }
-        if (!empty($params)) {
-            $conAction = $this->getControllerActionFromUrl($url);
-            list($controller, $action ) = $conAction;
-            if ($this->hasArrayinArray($params)) {
-                $controller = Mvc::createController($controller, $action);
-                call_user_func_array(array($controller, $action), $params);
-                die;
-            }
-            $param = $this->bindParams($params);
-            $url = "{$controller}/{$action}{$param}";
-        }
         echo parse_view_console("<meta http-equiv='refresh' content='0;url={$url}' >");
         die;
     }

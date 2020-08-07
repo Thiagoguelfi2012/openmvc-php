@@ -39,12 +39,13 @@ class Loader {
      * 
      * @param String $item
      * @param String $name
+     * @param String $params
      */
-     public function load($item, $name) {
+    public function load($item, $name, ...$params) {
         try {
             $parentClass = debug_backtrace()[1]['class'];
             $itemRegisterName = (!empty($parentClass) ? "{$parentClass}_{$item}" : $item);
-            
+
             $loadedItem = $this->getLoadedItem($itemRegisterName, $name);
             if (null !== $loadedItem) {
                 return $loadedItem;
@@ -58,8 +59,6 @@ class Loader {
 
             if (empty($file) || !file_exists($file)) {
                 $backtrace = debug_backtrace();
-//            pr($backtrace[0][line]);
-
                 echo_error("O arquivo <b>{$file}</b> n&atilde;o pode ser carregado!<br> Verifique se o arquivo existe e suas permiss&otilde;es.<p> <b>\$this->load(\"{$item}\",\"{$name}\")</b> em {$backtrace[0]['file']} na linha {$backtrace[0]['line']}</p>", 500);
                 return false; // TODO: Lançar erro como exception???
             }
@@ -68,15 +67,15 @@ class Loader {
             $name = str_replace('/', '_', $name);
             $klass = ucfirst($name);
 
-            if ($item == "models" || strpos($item, "/models") > 0)
+            if (!empty($params)) {
+                $instance = new $klass(...$params);
+            } else {
                 $instance = new $klass();
-            else
-                $instance = new $klass($name);
+            }
 
             $this->registerLoadedItem($itemRegisterName, $name, $instance);
         } catch (Exception $e) {
             echo_error("Exceção capturada: {$e->getMessage()}", 'Exception');
-//            echo 'Exceção capturada: ', $e->getMessage(), "\n";
         }
     }
 

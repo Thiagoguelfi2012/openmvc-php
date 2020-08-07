@@ -684,7 +684,7 @@ if (!function_exists('execute_action')) {
             try {
                 include_once ("{$_SERVER['DOCUMENT_ROOT']}/.." . $controller_path);
                 $klass = ucfirst($controller);
-                $instance = new $klass($controller, $action);
+                $instance = new $klass();
                 if (method_exists($instance, $action)) {
                     if (empty($params))
                         return $instance->$action();
