@@ -281,12 +281,19 @@ class Multimysql {
      *      host     - MySQL database host
      * ] 
      */
-    function __construct($connection_data = null) {
-
-        foreach (["user", "password", "host", "name",] as $value) {
-            if (!array_key_exists($value, $connection_data)) {
-                echo_error("`{$value}` is required on Multimysql!<br>\n", 500);
+    function __construct($connection_settings = null) {
+        $error = null;
+        if (empty($connection_settings)) {
+            $error = "Connection settings is empty on contructor!<br>\n";
+        } else {
+            foreach (["user", "password", "host", "name"] as $value) {
+                if (!array_key_exists($value, $connection_settings)) {
+                    $error = "Variable `{$value}` is required on Multimysql!<br>\n";
+                }
             }
+        }
+        if ($error) {
+            echo_error($error . "Use: \$this->load('components', 'Multimysql', [\n\t'user'=>'xxx',<br>\n\t'password'=>'xxx',<br>\n\t'host'=>'xxx',<br>\n\t'name'=>'xxx'\n     ]);", 500);
         }
 
         register_shutdown_function(array(&$this, "__destruct"));
@@ -299,10 +306,10 @@ class Multimysql {
         if (defined('DB_COLLATE'))
             $this->collate = DB_COLLATE;
 
-        $this->dbuser = $connection_data['user'];
-        $this->dbpassword = $connection_data['password'];
-        $this->dbhost = $connection_data['host'];
-        $this->dbname = $connection_data['name'];
+        $this->dbuser = $connection_settings['user'];
+        $this->dbpassword = $connection_settings['password'];
+        $this->dbhost = $connection_settings['host'];
+        $this->dbname = $connection_settings['name'];
 
         $this->connecttodb();
         return $this;
