@@ -274,18 +274,22 @@ class Multimysql {
      * @since 2.0.8
      *
      * @param string $thisuser MySQL database user
-     * @param string $thispassword MySQL database password
-     * @param string $thisname MySQL database name
-     * @param string $thishost MySQL database host
+     * @param string $connection_data [
+     *      user     - MySQL database user
+     *      password - MySQL database password
+     *      name     - MySQL database name
+     *      host     - MySQL database host
+     * ] 
      */
-    function __construct() {
-//        $thisuser, $thispassword, $thisname, $thishost
-        $thisuser = MULTIMYSQL_DBUSER;
-        $thispassword = MULTIMYSQL_DBPASS;
-        $thisname = MULTIMYSQL_DBNAME;
-        $thishost = MULTIMYSQL_DBHOST;
-        register_shutdown_function(array(&$this, "__destruct"));
+    function __construct($connection_data = null) {
 
+        foreach (["user", "password", "host", "name",] as $value) {
+            if (!array_key_exists($value, $connection_data)) {
+                echo_error("`{$value}` is required on Multimysql!<br>\n", 500);
+            }
+        }
+
+        register_shutdown_function(array(&$this, "__destruct"));
         if (defined('WP_DEBUG') and WP_DEBUG == true)
             $this->show_errors();
 
@@ -295,10 +299,10 @@ class Multimysql {
         if (defined('DB_COLLATE'))
             $this->collate = DB_COLLATE;
 
-        $this->dbuser = $thisuser;
-        $this->dbpassword = $thispassword;
-        $this->dbhost = $thishost;
-        $this->dbname = $thisname;
+        $this->dbuser = $connection_data['user'];
+        $this->dbpassword = $connection_data['password'];
+        $this->dbhost = $connection_data['host'];
+        $this->dbname = $connection_data['name'];
 
         $this->connecttodb();
         return $this;
