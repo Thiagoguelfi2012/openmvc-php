@@ -342,7 +342,7 @@ class Model extends Loader {
         return $this->loadPersistence($obj, $cleanObject);
     }
 
-    public function loadPersistence($obj = [], $cleanObject = false) {
+    private function loadPersistence($obj = [], $cleanObject = false) {
         $obj = (array) $obj;
         $internal = [];
         if ($cleanObject && !empty($this->tableDesc)) {
@@ -358,21 +358,8 @@ class Model extends Loader {
         }
         $className = ucfirst($this->name) . "Object";
         if ($className != "Object") {
-            $persistenceFile = __DIR__ . "/../../models/persistences/{$this->name}Object.php";
-            if (!file_exists($persistenceFile)) {
-                $modelObject = str_replace("modelObject", $className, file_get_contents(__DIR__ . "/modelObject.php"));
-                $modelObject = str_replace('**tableName**', $this->name, $modelObject);
-                if (!is_dir(__DIR__ . "/../../models/persistences/")) {
-                    mkdir(__DIR__ . "/../../models/persistences/");
-                    touch(__DIR__ . "/../../models/persistences/");
-                    chmod(__DIR__ . "/../../models/persistences/", 0777);
-                }
-                file_put_contents($persistenceFile, $modelObject);
-                touch($persistenceFile);
-                chmod($persistenceFile, 0777);
-            }
             if (!class_exists($className)) {
-                include_once $persistenceFile;
+                eval("class {$className} extends modelObject{" . 'protected $table' . " = '{$this->name}';}");
             }
             return new $className($internal);
         } else {
@@ -416,7 +403,7 @@ class Model extends Loader {
             return $id;
         }
     }
-    
+
     public function sanitize($dados) {
         if (!empty($dados)) {
             $allowedFields = (array_column($this->tableDesc, 'Field'));
@@ -630,14 +617,14 @@ class Model extends Loader {
                 $lastKey = -1;
                 foreach ($params as $key => $val) {
                     if (strtoupper($operator) == "LIKE") {
-                        $_conditions[] = "`". str_replace(".", "`.`", $key)."` LIKE '%{$val}%'";
+                        $_conditions[] = "`" . str_replace(".", "`.`", $key) . "` LIKE '%{$val}%'";
                     } else if (strstr($key, " LIKE%%")) {
                         $_conditions[] = "`" . trim(str_replace("LIKE%%", "", str_replace(".", "`.`", $key))) . "` LIKE '%{$val}%'";
                     } else if ($val === NULL) {
                         if (substr(mb_strtoupper($key), -3) == "NOT") {
                             $_conditions[] = "`" . trim(substr(str_replace(".", "`.`", $key), 0, -3)) . "` IS NOT NULL";
                         } else {
-                            $_conditions[] = "`".str_replace(".", "`.`", $key)."` IS NULL";
+                            $_conditions[] = "`" . str_replace(".", "`.`", $key) . "` IS NULL";
                         }
                     } else if (is_array($val) && !empty($val)) {
                         $joined_values = array();
@@ -668,7 +655,7 @@ class Model extends Loader {
                         if ($joined) {
                             if (is_string($key)) {
                                 $joined_valuesSTR = join(',', $joined_values);
-                                $_conditions[] = "`".str_replace(".", "`.`", $key)."` IN ({$joined_valuesSTR})";
+                                $_conditions[] = "`" . str_replace(".", "`.`", $key) . "` IN ({$joined_valuesSTR})";
                             }
                         }
                     } else {
@@ -676,7 +663,7 @@ class Model extends Loader {
                         if (strstr($key, " ")) {
                             $tmpKey = explode(" ", $key);
                         }
-                        $_conditions[$key] = "`".str_replace(".", "`.`", $tmpKey[0])."` {$tmpKey[1]}" . (is_string($val) ? ($val == "NULL" ? $val : "'" . str_replace('"', "'", $val) . "'" ) : $val);
+                        $_conditions[$key] = "`" . str_replace(".", "`.`", $tmpKey[0]) . "` {$tmpKey[1]}" . (is_string($val) ? ($val == "NULL" ? $val : "'" . str_replace('"', "'", $val) . "'" ) : $val);
                         unset($tmpKey);
                     }
                 }

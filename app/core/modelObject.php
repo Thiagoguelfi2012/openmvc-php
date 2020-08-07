@@ -2,14 +2,13 @@
 
 class modelObject {
 
-    private $fields;
-    private $functions;
-    private $table;
-    private $object;
-    private $model;
+    protected $table;
+    protected $model;
+    protected $fields;
+    protected $functions;
+    protected $object;
 
     function __construct($fields) {
-        $this->table = "**tableName**";
         if (!empty($fields)) {
             foreach ((array) $fields as $field => $value) {
                 $this->fields[] = $field;
