@@ -32,23 +32,32 @@ class modelObject {
         }
     }
 
+    private function model() {
+        if (empty($this->model)) {
+            global $db;
+            $this->model = new Model($db, $this->table);
+        }
+    }
+
     public function internalObject() {
         return (object) $this->object;
     }
 
     public function save() {
-        if (empty($this->model)) {
-            global $db;
-            $this->model = new Model($db, $this->table);
-        }
+        $this->model();
         return $this->model->save($this);
+    }
+
+    public function delete() {
+        $this->model();
+        return $this->model->delete($this->getId());
     }
 
     public function __call($method, $arguments) {
         if (in_array($method, $this->functions)) {
             return call_user_func_array(Closure::bind($this->$method, $this, get_called_class()), array_merge([$method], $arguments));
         } else {
-            echo_error("Function \"{$method}()\" not found on {$this->table} model!<br/>Getters and Setters for {$this->table} model.<pre>" . implode("()<br/>", $this->functions) . "()</pre>", 500);
+            echo_error("Function \"{$method}()\" not found on {$this->table}Object!<br/>\n\nAllowed functions for {$this->table}Object:\nsave()\ndelete()\n\nGetters and Setters:<pre>\n" . implode("()<br/>\n", $this->functions) . "()</pre>", 500);
         }
     }
 
