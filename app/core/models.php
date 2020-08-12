@@ -137,11 +137,11 @@ class Model extends Loader {
         $fields = implode(",", $fieldlist);
         $valuelist = array();
         foreach ($data as $key => $value) {
-            if ($value != NULL || $value === 0)
-                $valuelist[] = $this->keyToSprintf($value);
-            else {
+            if ($value === NULL) {
                 $valuelist[] = "NULL";
                 unset($data[$key]);
+            } else {
+                $valuelist[] = $this->keyToSprintf($value);
             }
         }
         $values = implode(",", $valuelist);
