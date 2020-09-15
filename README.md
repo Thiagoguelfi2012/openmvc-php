@@ -67,6 +67,16 @@ Dentro dos arquivos app.php e database.php localizados na app/configs/ do OpenMv
     #/* IP do host do MySQL */
     define('DB_HOST', '$ENDEREÇO_DO_BANCO_DE_DADOS');
 
+    #/* Conjunto de caracteres do banco de dados a ser usado na criação das tabelas. */
+    define('DB_CHARSET', 'utf8');
+
+    #/* Driver de conexão com o banco de dados. */
+    define('DB_DRIVER', 'mysqli');
+
+    define('DB_COLLATE', '');
+    define('INC', 'app/includes');
+    define('MULTIPLE_DB', FALSE);
+
 ______________________________________________________________________________________________________________________
 
 
