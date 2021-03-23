@@ -73,7 +73,16 @@ class Controller extends Loader {
         $output_file = $params[2];
         $controller = $params[3];
         $action = $params[4];
-        $parameters = (!empty($params[5]) ? unserialize(base64_decode($params[5])) : null);
+        $parameters = null;
+        if(!empty($params[5])){
+            if(substr($params[5], -12) == ".thread.args"){
+                $tmp = file_get_contents($params[5]);
+                unlink($params[5]);
+                $params[5] = $tmp;
+                unset($tmp);
+            }
+            $parameters =  unserialize(base64_decode($params[5]));
+        }
         unset($params);
         $output = serialize(execute_action($controller, $action, $parameters));
         file_put_contents($output_file, $output);

@@ -52,7 +52,12 @@ class Threads extends Loader {
         if (!in_array($action, $this->structure[$controller])) {
             echo_error("Action \"{$action}\" não encontrada no controller \"$controller\"", 404);
         }
-        $cmd = "php " . OPENMVC_DOCUMENT_ROOT . "/../openmvc common {$this->executor} \"{$output_file}\" {$controller} {$action}" . (!empty($params) ? " '" . base64_encode(serialize($params)) . "'" : "") . " > /dev/null & echo $!";
+        $args = base64_encode(serialize($params));
+        if (strlen($args) >= (1024 * 10)) {
+            file_put_contents("{$output_file}.args", $args);
+            $args = "{$output_file}.args";
+        }        
+        $cmd = "php " . OPENMVC_DOCUMENT_ROOT . "/../openmvc common {$this->executor} \"{$output_file}\" {$controller} {$action}" . (!empty($params) ? " '" . $args . "'" : "") . " > /dev/null & echo $!";
         $pid = trim(shell_exec($cmd));
         $this->tasks[$pid] = ["output_file" => $output_file];
         return $pid;
